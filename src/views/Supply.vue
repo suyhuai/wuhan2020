@@ -52,6 +52,7 @@
         Area
     } from 'vant'
     import AreaList from '../static/js/area';
+    import axios from "axios";
 
     export default {
         name: 'supply',
@@ -75,7 +76,7 @@
                 showProduction: false,
                 showArea: false,
                 productionSelected: [],
-                list: ['口罩', '防护服', '护目镜'],
+                list: ['口罩', '防护服', '防护眼镜','防护配件','其他物资'],
                 productions: "",
                 price: "",
                 amount: "",
@@ -89,14 +90,24 @@
         methods: {
             onSave() {
                 if (this.productions && this.amount && this.company && this.person && this.tel && this.tel){
-                    window.console.log(this.productions)
-                    window.console.log(this.price)
-                    window.console.log(this.amount)
-                    window.console.log(this.company)
-                    window.console.log(this.remark)
-                    window.console.log(this.person)
-                    window.console.log(this.tel)
-                    window.console.log(this.area)
+                    let params = {
+                        productions: this.productions,
+                        price: this.price,
+                        amount: this.amount,
+                        company: this.company,
+                        person: this.person,
+                        tel: this.tel,
+                        area: this.area,
+                        remark: this.remark,
+                        goodsType: "supply"
+                    }
+
+                    axios.post('/supply/upload', params).then(() => {
+                        Toast.success("上传成功")
+                        this.$router.push({name: 'home'})
+                    }).catch(() => {
+                        Toast.fail("上传失败，请稍后再试")
+                    })
                 }else {
                     Toast.fail('"请填写完必填选项"')
                     return
@@ -113,7 +124,6 @@
             },
             onProductionConfirm() {
                 this.showProduction = false
-                window.console.log(this.productionSelected)
                 let productions = []
                 for (let item of this.$refs.checkboxes){
                     if (item.checked){

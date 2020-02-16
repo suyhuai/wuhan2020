@@ -1,9 +1,9 @@
 <template>
     <div>
+
         <van-field
                 readonly
                 clickable
-                label="地区"
                 :value="value"
                 placeholder="请选择地区"
                 @click="showPicker = true"
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-    import {Area, Field, Popup,RadioGroup, Radio} from 'vant';
+    import {Area, Field, Popup, RadioGroup, Radio} from 'vant';
     import AreaList from '../static/js/area';
 
     export default {
@@ -53,10 +53,10 @@
                 let city = val[1]
                 let county = val[2]
 
-                this.value = '全部'
-                this.provence= ''
-                this.city= ''
-                this.county= ''
+                this.value = ''
+                this.provence = ''
+                this.city = ''
+                this.county = ''
 
                 if (provence && provence.name) {
                     this.provence = provence.name
@@ -71,7 +71,7 @@
                     this.value += "," + this.county
                 }
 
-                this.$emit('sendMsgFunc',this.provence,this.city,this.county)
+                this.$store.commit("setArea", {area: this.value})
                 this.showPicker = false
             },
             //取消选中城市
